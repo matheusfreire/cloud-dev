@@ -1,0 +1,15 @@
+{
+  "name": "clouddev",
+  "version": "1.0.0",
+  "description": "Cloud Dev for Udacity Nanodegree",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "author": "Matheus Freire",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
