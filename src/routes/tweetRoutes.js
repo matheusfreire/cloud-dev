@@ -1,42 +1,45 @@
-import express from 'express';
-import { tweets } from '../tweets.js';
-
+import express from "express";
+import tweetService from "../services/tweetService.js";
 export const router = express.Router();
 
-router.get("/tweets/:id", (req, res) => {
-    let {id} = req.params;
-    if (!id) { 
-        return res.status(400).send("id is required");
+router.get("/tweets/:id", async (req, res) => {
+    let { id } = req.params;
+
+    if (!id) {
+        return res.status(400).send(`Tweet id is required`);
     }
-    const tweetById = tweets.find(tweet => tweet.id === parseInt(id));
-    if(!tweetById) {
-        return res.status(404).send("Tweet not found");
+
+    const tweetById = await tweetService.findTweetById(id)
+
+    if (!tweetById) {
+        return res.status(404).send(`Tweet not found`)
     }
 
     return res.status(200).send(tweetById);
 });
 
-router.get("/tweets", (req, res) => {
-    let {author} = req.query;
+router.get("/tweets/", async (req, res) => {
+    let { author } = req.query;
 
-    let tweetsList = tweets;
+    let tweetList;
+
     if (author) {
-        tweetsList = tweetsList.filter(tweet => tweet.author === author);
+        tweetList = await tweetService.findTweetsByAuthor(author)
+    } else {
+        tweetList = await tweetService.findAll();
     }
-    return res.status(200).send(tweets);
+
+    res.status(200).send(tweetList);
 });
 
-router.post("/tweets", (req, res) => {
-    let {author, text, imgUrl} = req.body;
+router.post("/tweets/", async (req, res) => {
+    let { author, text, imgUrl } = req.body;
+
     if (!author || !text) {
-        return res.status(400).send("author and text are required");
+        return res.status(400).send("Missing required tweet information")
     }
-    const newTweet = {
-        id: tweets.length,
-        author,
-        text,
-        imgUrl
-    }
-    tweets.push(newTweet);
-    return res.status(201).send(newTweet);
+
+    const newTweet = await tweetService.createTweet(author, text, imgUrl)
+
+    res.status(201).send(newTweet);
 });
