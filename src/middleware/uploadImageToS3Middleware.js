@@ -1,3 +1,4 @@
+import AWSXRay from 'aws-xray-sdk';
 import { S3Client } from "@aws-sdk/client-s3";
 import multer from "multer";
 import multerS3 from "multer-s3";
@@ -17,7 +18,7 @@ const s3Storage = multerS3({
         cb(null, { fieldName: file.fieldname });
     },
     key: function (req, file, cb) {
-        const fileName = Date.now().toString() + '_' + file.fieldName + "_" + file.originalname;
+        const fileName = Date.now() + "_" + file.fieldname + "_" + file.originalname;
         cb(null, fileName);
     }
 });
