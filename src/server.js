@@ -1,6 +1,7 @@
 import bodyParser from 'body-parser';
 import express from 'express';
 import { router as tweetRoutes } from './routes/tweetRoutes.js';
+import { router as imageRoutes } from './routes/imageRoutes.js';
 
 (async () => {
     //Create an express application
@@ -17,7 +18,8 @@ import { router as tweetRoutes } from './routes/tweetRoutes.js';
         res.status(200).send("Welcome to the Cloud!");
     });
 
-    app.use(tweetRoutes)
+    app.use(tweetRoutes);
+    app.use(imageRoutes);
 
     // Start the Server
     app.listen(port, () => {
